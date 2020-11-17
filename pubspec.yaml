@@ -1,6 +1,6 @@
 name: flutter_linear_datepicker
 description: A flutter package providing Gregorian and Jalaali (Persian) date picker
-version: 1.0.4
+version: 1.1.0
 homepage: https://github.com/alikhaleghi76/flutter-datepicker
 
 environment:
