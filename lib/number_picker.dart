@@ -182,16 +182,11 @@ class NumberPicker extends StatelessWidget {
   Widget _integerListView(ThemeData themeData) {
     TextStyle defaultStyle;
     TextStyle selectedStyle;
-    if (fontFamily.isEmpty) {
-      defaultStyle = themeData.textTheme.body1;
-      selectedStyle = themeData.textTheme.headline;
-    } else {
       defaultStyle = themeData.textTheme.body1
           .copyWith(fontFamily: fontFamily, color: unselectedColor);
       selectedStyle = themeData.textTheme.headline.copyWith(
           color: selectedColor ?? themeData.accentColor,
           fontFamily: fontFamily);
-    }
 
     var listItemCount = integerItemCount + 2;
 
