@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shamsi_date/shamsi_date.dart';
+
 import 'number_picker.dart';
 
 class LinearDatePicker extends StatefulWidget {
@@ -24,40 +25,39 @@ class LinearDatePicker extends StatefulWidget {
 
   double columnWidth;
 
-  LinearDatePicker({
-    this.startDate = "",
-    this.endDate = "",
-    this.initialDate = "",
-    @required this.dateChangeListener,
-    this.showDay = true,
-    this.fontFamily = "",
-    this.textColor,
-    this.selectedColor,
-    this.unselectedColor,
-    this.yearText = "سال",
-    this.monthText = "ماه",
-    this.dayText = "روز",
-    this.showLabels = true,
-    this.columnWidth = 55.0,
-  });
+  bool isJalaali;
+
+  LinearDatePicker(
+      {this.startDate = "",
+      this.endDate = "",
+      this.initialDate = "",
+      @required this.dateChangeListener,
+      this.showDay = true,
+      this.fontFamily = "",
+      this.textColor,
+      this.selectedColor,
+      this.unselectedColor,
+      this.yearText = "سال",
+      this.monthText = "ماه",
+      this.dayText = "روز",
+      this.showLabels = true,
+      this.columnWidth = 55.0,
+      this.isJalaali = false});
 
   @override
-  _LinearDatePickerState createState() =>
-      _LinearDatePickerState(
-        startDate,
-        endDate,
-        initialDate,
-        dateChangeListener,
-        showDay: showDay,
-        fontFamily: fontFamily,
-        textColor: textColor,
-        selectedColor: selectedColor,
-        unselectedColor: unselectedColor,
-        yearText: yearText,
-        monthText: monthText,
-        dayText: dayText,
+  _LinearDatePickerState createState() => _LinearDatePickerState(
+      startDate, endDate, initialDate, dateChangeListener,
+      showDay: showDay,
+      fontFamily: fontFamily,
+      textColor: textColor,
+      selectedColor: selectedColor,
+      unselectedColor: unselectedColor,
+      yearText: yearText,
+      monthText: monthText,
+      dayText: dayText,
       showLabels: showLabels,
-        columnWidth: columnWidth);
+      columnWidth: columnWidth,
+      isJalaali: isJalaali);
 }
 
 class _LinearDatePickerState extends State<LinearDatePicker> {
@@ -65,12 +65,8 @@ class _LinearDatePickerState extends State<LinearDatePicker> {
   int _selectedMonth;
   int _selectedDay;
 
-  int minYear = Jalali
-      .now()
-      .year - 100;
-  int maxYear = Jalali
-      .now()
-      .year;
+  int minYear;
+  int maxYear;
 
   int minMonth = 01;
   int maxMonth = 12;
@@ -100,21 +96,31 @@ class _LinearDatePickerState extends State<LinearDatePicker> {
 
   double columnWidth;
 
-  _LinearDatePickerState(this.startDate, this.endDate, this.initialDate,
-      this.onDateSelected,
+  bool isJalaali;
+
+  _LinearDatePickerState(
+      this.startDate, this.endDate, this.initialDate, this.onDateSelected,
       {this.showDay = true,
-        this.fontFamily = "",
-        this.textColor,
-        this.selectedColor,
-        this.unselectedColor,
-        this.yearText,
-        this.monthText,
-        this.dayText,
-        this.showLabels,
-        this.columnWidth});
+      this.fontFamily = "",
+      this.textColor,
+      this.selectedColor,
+      this.unselectedColor,
+      this.yearText,
+      this.monthText,
+      this.dayText,
+      this.showLabels,
+      this.columnWidth,
+      this.isJalaali});
 
   @override
   initState() {
+    if (isJalaali) {
+      minYear = Jalali.now().year - 100;
+      maxYear = Jalali.now().year;
+    } else {
+      minYear = Gregorian.now().year - 100;
+      maxYear = Gregorian.now().year;
+    }
     if (initialDate.isNotEmpty) {
       List<String> initList = initialDate.split("/");
       _selectedYear = int.parse(initList[0]);
@@ -122,19 +128,17 @@ class _LinearDatePickerState extends State<LinearDatePicker> {
       if (showDay)
         _selectedDay = int.parse(initList[2]);
       else
-        _selectedDay = Jalali
-            .now()
-            .day;
+        _selectedDay = isJalaali ? Jalali.now().day : Jalali.now().day;
     } else {
-      _selectedYear = Jalali
-          .now()
-          .year;
-      _selectedMonth = Jalali
-          .now()
-          .month;
-      _selectedDay = Jalali
-          .now()
-          .day;
+      if (isJalaali) {
+        _selectedYear = Jalali.now().year;
+        _selectedMonth = Jalali.now().month;
+        _selectedDay = Jalali.now().day;
+      } else {
+        _selectedYear = Gregorian.now().year;
+        _selectedMonth = Gregorian.now().month;
+        _selectedDay = Gregorian.now().day;
+      }
     }
   }
 
@@ -172,8 +176,8 @@ class _LinearDatePickerState extends State<LinearDatePicker> {
                     width: columnWidth,
                     child: Text(
                       dayText,
-                      style: TextStyle(
-                          fontFamily: fontFamily, color: textColor),
+                      style:
+                          TextStyle(fontFamily: fontFamily, color: textColor),
                       textAlign: TextAlign.center,
                     )),
               ),
@@ -247,16 +251,30 @@ class _LinearDatePickerState extends State<LinearDatePicker> {
   }
 
   _getMonthLength(int selectedYear, int selectedMonth) {
-    if (selectedMonth <= 6) {
-      return 31;
-    }
-    if (selectedMonth > 6 && selectedMonth < 12) {
-      return 30;
-    }
-    if (Jalali(selectedYear).isLeapYear()) {
-      return 30;
+    if (isJalaali) {
+      if (selectedMonth <= 6) {
+        return 31;
+      }
+      if (selectedMonth > 6 && selectedMonth < 12) {
+        return 30;
+      }
+      if (Jalali(selectedYear).isLeapYear()) {
+        return 30;
+      } else {
+        return 29;
+      }
     } else {
-      return 29;
+      DateTime firstOfNextMonth;
+      if (selectedMonth == 12) {
+        firstOfNextMonth = DateTime(
+            selectedYear + 1, 1, 1, 12); //year, selectedMonth, day, hour
+      } else {
+        firstOfNextMonth = DateTime(selectedYear, selectedMonth + 1, 1, 12);
+      }
+      int numberOfDaysInMonth =
+          firstOfNextMonth.subtract(Duration(days: 1)).day;
+      //.subtract(Duration) returns a DateTime, .day gets the integer for the day of that DateTime
+      return numberOfDaysInMonth;
     }
   }
 
