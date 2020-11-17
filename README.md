@@ -2,7 +2,7 @@
 ## Flutter Gregorian and Jalaali (Persian) linear date picker
 <br>
 <br>
-[package at pub.dev](https://pub.dev/packages/flutter_linear_datepicker/versions/1.0.0)
+[package at pub.dev](https://pub.dev/packages/flutter_linear_datepicker/versions/1.0.5)
 <br>
 
 <p align="center">
@@ -16,7 +16,7 @@
 Add this to your package's pubspec.yaml file:
 ```
 dependencies:
-  flutter_linear_datepicker: ^1.0.4
+  flutter_linear_datepicker: ^1.0.5
 ```
 
 #### 2. Install it
