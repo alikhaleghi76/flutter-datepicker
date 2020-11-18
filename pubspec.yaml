@@ -10,7 +10,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  shamsi_date: ^0.8.1
+  shamsi_date: ^0.9.1
 
 dev_dependencies:
   flutter_test:
