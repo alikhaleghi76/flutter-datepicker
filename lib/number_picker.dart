@@ -174,17 +174,15 @@ class NumberPicker extends StatelessWidget {
   Widget build(BuildContext context) {
     final ThemeData themeData = Theme.of(context);
 
-    if (decimalPlaces == 0) {
-      return _integerListView(themeData);
-    }
+    return _integerListView(themeData);
   }
 
   Widget _integerListView(ThemeData themeData) {
     TextStyle defaultStyle;
     TextStyle selectedStyle;
-      defaultStyle = themeData.textTheme.body1
+      defaultStyle = themeData.textTheme.bodyText2
           .copyWith(fontFamily: fontFamily, color: unselectedColor);
-      selectedStyle = themeData.textTheme.headline.copyWith(
+      selectedStyle = themeData.textTheme.headline5.copyWith(
           color: selectedColor ?? themeData.accentColor,
           fontFamily: fontFamily);
 
@@ -466,20 +464,18 @@ class _NumberPickerDialogControllerState extends State<NumberPickerDialog> {
   }
 
   NumberPicker _buildNumberPicker() {
-    if (widget.decimalPlaces <= 0) {
-      return NumberPicker.integer(
-        initialValue: selectedIntValue,
-        minValue: widget.minValue,
-        maxValue: widget.maxValue,
-        step: widget.step,
-        zeroPad: widget.zeroPad,
-        highlightSelectedValue: widget.highlightSelectedValue,
-        decoration: widget.decoration,
-        onChanged: _handleValueChanged,
-        textMapper: widget.textMapper,
-        haptics: widget.haptics,
-      );
-    }
+    return NumberPicker.integer(
+      initialValue: selectedIntValue,
+      minValue: widget.minValue,
+      maxValue: widget.maxValue,
+      step: widget.step,
+      zeroPad: widget.zeroPad,
+      highlightSelectedValue: widget.highlightSelectedValue,
+      decoration: widget.decoration,
+      onChanged: _handleValueChanged,
+      textMapper: widget.textMapper,
+      haptics: widget.haptics,
+    );
   }
 
   @override
