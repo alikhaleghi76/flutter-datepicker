@@ -13,19 +13,17 @@ class LinearDatePicker extends StatefulWidget {
 
   final String fontFamily;
 
-  Color textColor;
-  Color selectedColor;
-  Color unselectedColor;
+  final Color textColor;
+  final Color selectedColor;
+  final Color unselectedColor;
 
-  String yearText;
-  String monthText;
-  String dayText;
+  final String yearText;
+  final String monthText;
+  final String dayText;
 
-  bool showLabels;
-
-  double columnWidth;
-
-  bool isJalaali;
+  final bool showLabels;
+  final double columnWidth;
+  final bool isJalaali;
 
   LinearDatePicker(
       {this.startDate = "",
@@ -114,6 +112,7 @@ class _LinearDatePickerState extends State<LinearDatePicker> {
 
   @override
   initState() {
+    super.initState();
     if (isJalaali) {
       minYear = Jalali.now().year - 100;
       maxYear = Jalali.now().year;
