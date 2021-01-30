@@ -48,6 +48,7 @@ class MyHomePage extends StatelessWidget {
                 showLabels: true,
                 columnWidth: 100,
                 isJalaali: true,
+                showMonthName: true,
               ),
               RaisedButton(
                 child: Text(
@@ -73,6 +74,7 @@ class MyHomePage extends StatelessWidget {
                 dateChangeListener: (String selectedDate) {
                   print(selectedDate);
                 },
+                showMonthName: true,
               ),
             ));
   }
