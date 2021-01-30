@@ -47,7 +47,6 @@ class MyHomePage extends StatelessWidget {
                 dayText: "روز | day",
                 showLabels: true,
                 columnWidth: 100,
-                isJalaali: true,
                 showMonthName: true,
               ),
               RaisedButton(
@@ -75,6 +74,7 @@ class MyHomePage extends StatelessWidget {
                   print(selectedDate);
                 },
                 showMonthName: true,
+                isJalaali: true,
               ),
             ));
   }

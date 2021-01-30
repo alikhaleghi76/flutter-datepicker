@@ -4,6 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
+import 'month_name_handler.dart';
 
 /// Created by Marcin Szałek
 
@@ -40,6 +41,8 @@ class NumberPicker extends StatelessWidget {
     this.fontFamily = "",
     this.selectedColor,
     this.unselectedColor,
+    this.isShowMonthName = false,
+    this.isJalali = false,
   })  : assert(initialValue != null),
         assert(minValue != null),
         assert(maxValue != null),
@@ -136,6 +139,12 @@ class NumberPicker extends StatelessWidget {
   ///Set unselected numbers font color
   final Color unselectedColor;
 
+  //Show month name instead of month int place in the year
+  final bool isShowMonthName;
+
+  //isJalali for get the month right name
+  final bool isJalali;
+
   //
   //----------------------------- PUBLIC ------------------------------
   //
@@ -226,7 +235,7 @@ class NumberPicker extends StatelessWidget {
                       : Center(
                           child: Text(
                             getDisplayedValue(value),
-                            style: itemStyle,
+                            style: (isShowMonthName)?itemStyle.copyWith(fontSize: 13):itemStyle,
                           ),
                         );
                 },
@@ -245,10 +254,17 @@ class NumberPicker extends StatelessWidget {
   }
 
   String getDisplayedValue(int value) {
-    final text = zeroPad
-        ? value.toString().padLeft(maxValue.toString().length, '0')
-        : value.toString();
-    return textMapper != null ? textMapper(text) : text;
+    if (isShowMonthName) {
+      return value.getMonthName(isJalali);
+    }
+    else {
+      final text = zeroPad
+          ? value.toString().padLeft(maxValue
+          .toString()
+          .length, '0')
+          : value.toString();
+      return textMapper != null ? textMapper(text) : text;
+    }
   }
 
   //
@@ -401,6 +417,9 @@ class NumberPickerDialog extends StatefulWidget {
   final TextMapper textMapper;
   final bool haptics;
 
+  final bool isShowMonthName;
+  final bool isJalali;
+
   ///constructor for integer values
   NumberPickerDialog.integer({
     @required this.minValue,
@@ -417,6 +436,8 @@ class NumberPickerDialog extends StatefulWidget {
     this.haptics = false,
     Widget confirmWidget,
     Widget cancelWidget,
+    this.isShowMonthName = false,
+    this.isJalali = false,
   })  : confirmWidget = confirmWidget ?? Text("OK"),
         cancelWidget = cancelWidget ?? Text("CANCEL"),
         decimalPlaces = 0,
@@ -436,6 +457,8 @@ class NumberPickerDialog extends StatefulWidget {
     this.haptics = false,
     Widget confirmWidget,
     Widget cancelWidget,
+    this.isShowMonthName = false,
+    this.isJalali = false,
   })  : confirmWidget = confirmWidget ?? Text("OK"),
         cancelWidget = cancelWidget ?? Text("CANCEL"),
         initialIntegerValue = -1,

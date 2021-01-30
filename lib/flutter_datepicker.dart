@@ -24,6 +24,7 @@ class LinearDatePicker extends StatefulWidget {
   final bool showLabels;
   final double columnWidth;
   final bool isJalaali;
+  final bool showMonthName;
 
   LinearDatePicker(
       {this.startDate = "",
@@ -40,7 +41,9 @@ class LinearDatePicker extends StatefulWidget {
       this.dayText = "روز",
       this.showLabels = true,
       this.columnWidth = 55.0,
-      this.isJalaali = false});
+      this.isJalaali = false,
+      this.showMonthName = false,
+      });
 
   @override
   _LinearDatePickerState createState() => _LinearDatePickerState(
@@ -55,7 +58,9 @@ class LinearDatePicker extends StatefulWidget {
       dayText: dayText,
       showLabels: showLabels,
       columnWidth: columnWidth,
-      isJalaali: isJalaali);
+      isJalaali: isJalaali,
+      showMonthName: showMonthName,
+  );
 }
 
 class _LinearDatePickerState extends State<LinearDatePicker> {
@@ -96,6 +101,8 @@ class _LinearDatePickerState extends State<LinearDatePicker> {
 
   bool isJalaali;
 
+  bool showMonthName;
+
   _LinearDatePickerState(
       this.startDate, this.endDate, this.initialDate, this.onDateSelected,
       {this.showDay = true,
@@ -108,7 +115,8 @@ class _LinearDatePickerState extends State<LinearDatePicker> {
       this.dayText,
       this.showLabels,
       this.columnWidth,
-      this.isJalaali});
+      this.isJalaali,
+      this.showMonthName});
 
   @override
   initState() {
@@ -212,6 +220,8 @@ class _LinearDatePickerState extends State<LinearDatePicker> {
                 fontFamily: fontFamily,
                 selectedColor: selectedColor,
                 unselectedColor: unselectedColor,
+                isShowMonthName: showMonthName,
+                isJalali: isJalaali,
                 onChanged: (value) {
                   setState(() {
                     _selectedMonth = value;
