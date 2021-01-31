@@ -48,6 +48,7 @@ class MyHomePage extends StatelessWidget {
                 showLabels: true,
                 columnWidth: 100,
                 showMonthName: true,
+                isJalaali: true,
               ),
               RaisedButton(
                 child: Text(

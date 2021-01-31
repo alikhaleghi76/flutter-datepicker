@@ -5,5 +5,8 @@
 * updated pubspec.yaml informations
 
 ## [1.1.1] - 11/18/2020
-* updated readme 
+* updated readme
+
+## [1.1.2] - 01/31/2021
+* Added month Name Attribute
 
