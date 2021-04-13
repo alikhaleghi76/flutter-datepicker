@@ -23,11 +23,11 @@ class NumberPicker extends StatelessWidget {
 
   ///constructor for integer number picker
   NumberPicker.integer({
-    Key key,
-    @required int initialValue,
-    @required this.minValue,
-    @required this.maxValue,
-    @required this.onChanged,
+    Key? key,
+    required int initialValue,
+    required this.minValue,
+    required this.maxValue,
+    required this.onChanged,
     this.enabled = true,
     this.textMapper,
     this.itemExtent = kDefaultItemExtent,
@@ -78,7 +78,7 @@ class NumberPicker extends StatelessWidget {
   final bool enabled;
 
   ///build the text of each item on the picker
-  final TextMapper textMapper;
+  final TextMapper? textMapper;
 
   ///inidcates how many decimal places to show
   /// e.g. 0=>[1,2,3...], 1=>[1.0, 1.1, 1.2...]  2=>[1.00, 1.01, 1.02...]
@@ -91,13 +91,13 @@ class NumberPicker extends StatelessWidget {
   final double listViewHeight;
 
   ///width of list view in pixels
-  final double listViewWidth;
+  final double? listViewWidth;
 
   ///ScrollController used for integer list
   final ScrollController intScrollController;
 
   ///ScrollController used for decimal list
-  final ScrollController decimalScrollController;
+  final ScrollController? decimalScrollController;
 
   ///Currently selected integer value
   final int selectedIntValue;
@@ -109,7 +109,7 @@ class NumberPicker extends StatelessWidget {
   final bool highlightSelectedValue;
 
   ///Decoration to apply to central box where the selected value is placed
-  final Decoration decoration;
+  final Decoration? decoration;
 
   ///Step between elements. Only for integer datePicker
   ///Examples:
@@ -134,16 +134,16 @@ class NumberPicker extends StatelessWidget {
   final String fontFamily;
 
   ///Set selected numbers font color
-  final Color selectedColor;
+  final Color? selectedColor;
 
   ///Set unselected numbers font color
-  final Color unselectedColor;
+  final Color? unselectedColor;
 
   //Show month name instead of month int place in the year
-  final bool isShowMonthName;
+  final bool? isShowMonthName;
 
   //isJalali for get the month right name
-  final bool isJalali;
+  final bool? isJalali;
 
   //
   //----------------------------- PUBLIC ------------------------------
@@ -163,7 +163,7 @@ class NumberPicker extends StatelessWidget {
 
   /// Used to animate decimal part of double value to new selected value
   void animateDecimal(int decimalValue) {
-    _animate(decimalScrollController, decimalValue * itemExtent);
+    _animate(decimalScrollController!, decimalValue * itemExtent);
   }
 
   /// Used to animate decimal number picker to selected value
@@ -189,9 +189,9 @@ class NumberPicker extends StatelessWidget {
   Widget _integerListView(ThemeData themeData) {
     TextStyle defaultStyle;
     TextStyle selectedStyle;
-      defaultStyle = themeData.textTheme.bodyText2
+      defaultStyle = themeData.textTheme.bodyText2!
           .copyWith(fontFamily: fontFamily, color: unselectedColor);
-      selectedStyle = themeData.textTheme.headline5.copyWith(
+      selectedStyle = themeData.textTheme.headline5!.copyWith(
           color: selectedColor ?? themeData.accentColor,
           fontFamily: fontFamily);
 
@@ -235,7 +235,7 @@ class NumberPicker extends StatelessWidget {
                       : Center(
                           child: Text(
                             getDisplayedValue(value),
-                            style: (isShowMonthName)?itemStyle.copyWith(fontSize: 13):itemStyle,
+                            style: isShowMonthName!?itemStyle.copyWith(fontSize: 13):itemStyle,
                           ),
                         );
                 },
@@ -254,8 +254,8 @@ class NumberPicker extends StatelessWidget {
   }
 
   String getDisplayedValue(int value) {
-    if (isShowMonthName) {
-      return value.getMonthName(isJalali);
+    if (isShowMonthName!) {
+      return value.getMonthName(isJalali!);
     }
     else {
       final text = zeroPad
@@ -263,7 +263,7 @@ class NumberPicker extends StatelessWidget {
           .toString()
           .length, '0')
           : value.toString();
-      return textMapper != null ? textMapper(text) : text;
+      return textMapper != null ? textMapper!(text) : text;
     }
   }
 
@@ -373,13 +373,13 @@ class NumberPicker extends StatelessWidget {
 class _NumberPickerSelectedItemDecoration extends StatelessWidget {
   final Axis axis;
   final double itemExtent;
-  final Decoration decoration;
+  final Decoration? decoration;
 
   const _NumberPickerSelectedItemDecoration(
-      {Key key,
-      @required this.axis,
-      @required this.itemExtent,
-      @required this.decoration})
+      {Key? key,
+      required this.axis,
+      required this.itemExtent,
+      required this.decoration})
       : super(key: key);
 
   @override
@@ -405,16 +405,16 @@ class NumberPickerDialog extends StatefulWidget {
   final int initialIntegerValue;
   final double initialDoubleValue;
   final int decimalPlaces;
-  final Widget title;
-  final EdgeInsets titlePadding;
+  final Widget? title;
+  final EdgeInsets? titlePadding;
   final Widget confirmWidget;
   final Widget cancelWidget;
   final int step;
   final bool infiniteLoop;
   final bool zeroPad;
   final bool highlightSelectedValue;
-  final Decoration decoration;
-  final TextMapper textMapper;
+  final Decoration? decoration;
+  final TextMapper? textMapper;
   final bool haptics;
 
   final bool isShowMonthName;
@@ -422,9 +422,9 @@ class NumberPickerDialog extends StatefulWidget {
 
   ///constructor for integer values
   NumberPickerDialog.integer({
-    @required this.minValue,
-    @required this.maxValue,
-    @required this.initialIntegerValue,
+    required this.minValue,
+    required this.maxValue,
+    required this.initialIntegerValue,
     this.title,
     this.titlePadding,
     this.step = 1,
@@ -434,8 +434,8 @@ class NumberPickerDialog extends StatefulWidget {
     this.decoration,
     this.textMapper,
     this.haptics = false,
-    Widget confirmWidget,
-    Widget cancelWidget,
+    Widget? confirmWidget,
+    Widget? cancelWidget,
     this.isShowMonthName = false,
     this.isJalali = false,
   })  : confirmWidget = confirmWidget ?? Text("OK"),
@@ -445,9 +445,9 @@ class NumberPickerDialog extends StatefulWidget {
 
   ///constructor for decimal values
   NumberPickerDialog.decimal({
-    @required this.minValue,
-    @required this.maxValue,
-    @required this.initialDoubleValue,
+    required this.minValue,
+    required this.maxValue,
+    required this.initialDoubleValue,
     this.decimalPlaces = 1,
     this.title,
     this.titlePadding,
@@ -455,8 +455,8 @@ class NumberPickerDialog extends StatefulWidget {
     this.decoration,
     this.textMapper,
     this.haptics = false,
-    Widget confirmWidget,
-    Widget cancelWidget,
+    Widget? confirmWidget,
+    Widget? cancelWidget,
     this.isShowMonthName = false,
     this.isJalali = false,
   })  : confirmWidget = confirmWidget ?? Text("OK"),
@@ -482,7 +482,7 @@ class _NumberPickerDialogControllerState extends State<NumberPickerDialog> {
     if (value is int) {
       setState(() => selectedIntValue = value);
     } else {
-      setState(() => selectedDoubleValue = value);
+      setState(() => selectedDoubleValue = value as double);
     }
   }
 

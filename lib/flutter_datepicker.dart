@@ -13,9 +13,9 @@ class LinearDatePicker extends StatefulWidget {
 
   final String fontFamily;
 
-  final Color textColor;
-  final Color selectedColor;
-  final Color unselectedColor;
+  final Color? textColor;
+  final Color? selectedColor;
+  final Color? unselectedColor;
 
   final String yearText;
   final String monthText;
@@ -30,7 +30,7 @@ class LinearDatePicker extends StatefulWidget {
       {this.startDate = "",
       this.endDate = "",
       this.initialDate = "",
-      @required this.dateChangeListener,
+      required this.dateChangeListener,
       this.showDay = true,
       this.fontFamily = "",
       this.textColor,
@@ -64,12 +64,12 @@ class LinearDatePicker extends StatefulWidget {
 }
 
 class _LinearDatePickerState extends State<LinearDatePicker> {
-  int _selectedYear;
-  int _selectedMonth;
-  int _selectedDay;
+  int? _selectedYear;
+  int? _selectedMonth;
+  late int _selectedDay;
 
-  int minYear;
-  int maxYear;
+  int? minYear;
+  int? maxYear;
 
   int minMonth = 01;
   int maxMonth = 12;
@@ -87,21 +87,21 @@ class _LinearDatePickerState extends State<LinearDatePicker> {
 
   String fontFamily;
 
-  Color textColor;
-  Color selectedColor;
-  Color unselectedColor;
+  Color? textColor;
+  Color? selectedColor;
+  Color? unselectedColor;
 
-  String yearText;
-  String monthText;
-  String dayText;
+  String? yearText;
+  String? monthText;
+  String? dayText;
 
-  bool showLabels = false;
+  bool? showLabels = false;
 
-  double columnWidth;
+  double? columnWidth;
 
-  bool isJalaali;
+  bool? isJalaali;
 
-  bool showMonthName;
+  bool? showMonthName;
 
   _LinearDatePickerState(
       this.startDate, this.endDate, this.initialDate, this.onDateSelected,
@@ -121,7 +121,7 @@ class _LinearDatePickerState extends State<LinearDatePicker> {
   @override
   initState() {
     super.initState();
-    if (isJalaali) {
+    if (isJalaali!) {
       minYear = Jalali.now().year - 100;
       maxYear = Jalali.now().year;
     } else {
@@ -135,9 +135,9 @@ class _LinearDatePickerState extends State<LinearDatePicker> {
       if (showDay)
         _selectedDay = int.parse(initList[2]);
       else
-        _selectedDay = isJalaali ? Jalali.now().day : Jalali.now().day;
+        _selectedDay = isJalaali! ? Jalali.now().day : Jalali.now().day;
     } else {
-      if (isJalaali) {
+      if (isJalaali!) {
         _selectedYear = Jalali.now().year;
         _selectedMonth = Jalali.now().month;
         _selectedDay = Jalali.now().day;
@@ -158,7 +158,7 @@ class _LinearDatePickerState extends State<LinearDatePicker> {
       mainAxisSize: MainAxisSize.min,
       children: [
         Visibility(
-          visible: showLabels,
+          visible: showLabels!,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -166,14 +166,14 @@ class _LinearDatePickerState extends State<LinearDatePicker> {
               SizedBox(
                   width: columnWidth,
                   child: Text(
-                    yearText,
+                    yearText!,
                     style: TextStyle(fontFamily: fontFamily, color: textColor),
                     textAlign: TextAlign.center,
                   )),
               SizedBox(
                   width: columnWidth,
                   child: Text(
-                    monthText,
+                    monthText!,
                     style: TextStyle(fontFamily: fontFamily, color: textColor),
                     textAlign: TextAlign.center,
                   )),
@@ -182,7 +182,7 @@ class _LinearDatePickerState extends State<LinearDatePicker> {
                 child: SizedBox(
                     width: columnWidth,
                     child: Text(
-                      dayText,
+                      dayText!,
                       style:
                           TextStyle(fontFamily: fontFamily, color: textColor),
                       textAlign: TextAlign.center,
@@ -196,15 +196,15 @@ class _LinearDatePickerState extends State<LinearDatePicker> {
           children: [
             NumberPicker.integer(
                 listViewWidth: columnWidth,
-                initialValue: _selectedYear,
-                minValue: _getMinimumYear(),
+                initialValue: _selectedYear!,
+                minValue: _getMinimumYear()!,
                 maxValue: _getMaximumYear(),
                 fontFamily: fontFamily,
                 selectedColor: selectedColor,
                 unselectedColor: unselectedColor,
                 onChanged: (value) {
                   setState(() {
-                    _selectedYear = value;
+                    _selectedYear = value as int?;
                     if (showDay)
                       onDateSelected(
                           "$_selectedYear/$_selectedMonth/$_selectedDay");
@@ -214,7 +214,7 @@ class _LinearDatePickerState extends State<LinearDatePicker> {
                 }),
             NumberPicker.integer(
                 listViewWidth: columnWidth,
-                initialValue: _selectedMonth,
+                initialValue: _selectedMonth!,
                 minValue: _getMinimumMonth(),
                 maxValue: _getMaximumMonth(),
                 fontFamily: fontFamily,
@@ -224,7 +224,7 @@ class _LinearDatePickerState extends State<LinearDatePicker> {
                 isJalali: isJalaali,
                 onChanged: (value) {
                   setState(() {
-                    _selectedMonth = value;
+                    _selectedMonth = value as int?;
                     if (showDay)
                       onDateSelected(
                           "$_selectedYear/$_selectedMonth/$_selectedDay");
@@ -244,7 +244,7 @@ class _LinearDatePickerState extends State<LinearDatePicker> {
                   unselectedColor: unselectedColor,
                   onChanged: (value) {
                     setState(() {
-                      _selectedDay = value;
+                      _selectedDay = value as int;
                       if (showDay)
                         onDateSelected(
                             "$_selectedYear/$_selectedMonth/$_selectedDay");
@@ -259,15 +259,15 @@ class _LinearDatePickerState extends State<LinearDatePicker> {
     );
   }
 
-  _getMonthLength(int selectedYear, int selectedMonth) {
-    if (isJalaali) {
-      if (selectedMonth <= 6) {
+  _getMonthLength(int? selectedYear, int? selectedMonth) {
+    if (isJalaali!) {
+      if (selectedMonth! <= 6) {
         return 31;
       }
       if (selectedMonth > 6 && selectedMonth < 12) {
         return 30;
       }
-      if (Jalali(selectedYear).isLeapYear()) {
+      if (Jalali(selectedYear!).isLeapYear()) {
         return 30;
       } else {
         return 29;
@@ -276,9 +276,9 @@ class _LinearDatePickerState extends State<LinearDatePicker> {
       DateTime firstOfNextMonth;
       if (selectedMonth == 12) {
         firstOfNextMonth = DateTime(
-            selectedYear + 1, 1, 1, 12); //year, selectedMonth, day, hour
+            selectedYear! + 1, 1, 1, 12); //year, selectedMonth, day, hour
       } else {
-        firstOfNextMonth = DateTime(selectedYear, selectedMonth + 1, 1, 12);
+        firstOfNextMonth = DateTime(selectedYear!, selectedMonth! + 1, 1, 12);
       }
       int numberOfDaysInMonth =
           firstOfNextMonth.subtract(Duration(days: 1)).day;
@@ -311,7 +311,7 @@ class _LinearDatePickerState extends State<LinearDatePicker> {
     return maxMonth;
   }
 
-  int _getMinimumYear() {
+  int? _getMinimumYear() {
     if (startDate.isNotEmpty) {
       var startList = startDate.split("/");
       return int.parse(startList[0]);

@@ -10,3 +10,7 @@
 ## [1.1.2] - 01/31/2021
 * Added month Name Attribute
 
+
+## [2.0.0] - 04/13/2021
+* Migrate to null-safety
+
