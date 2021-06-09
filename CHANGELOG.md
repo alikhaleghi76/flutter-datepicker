@@ -14,3 +14,6 @@
 ## [2.0.0] - 04/13/2021
 * Migrate to null-safety
 
+## [2.0.1] - 06/09/2021
+* Add font size
+

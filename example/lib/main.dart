@@ -39,6 +39,8 @@ class MyHomePage extends StatelessWidget {
                 },
                 showDay: true,
                 fontFamily: 'iran',
+                fontSize: 18.0,
+                labelSize: 14.0,
                 textColor: Colors.black,
                 selectedColor: Colors.deepOrange,
                 unselectedColor: Colors.blueGrey,

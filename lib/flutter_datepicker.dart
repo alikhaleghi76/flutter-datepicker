@@ -12,6 +12,8 @@ class LinearDatePicker extends StatefulWidget {
   final String initialDate;
 
   final String fontFamily;
+  final double fontSize;
+  final double labelSize;
 
   final Color? textColor;
   final Color? selectedColor;
@@ -26,41 +28,29 @@ class LinearDatePicker extends StatefulWidget {
   final bool isJalaali;
   final bool showMonthName;
 
-  LinearDatePicker(
-      {this.startDate = "",
-      this.endDate = "",
-      this.initialDate = "",
-      required this.dateChangeListener,
-      this.showDay = true,
-      this.fontFamily = "",
-      this.textColor,
-      this.selectedColor,
-      this.unselectedColor,
-      this.yearText = "سال",
-      this.monthText = "ماه",
-      this.dayText = "روز",
-      this.showLabels = true,
-      this.columnWidth = 55.0,
-      this.isJalaali = false,
-      this.showMonthName = false,
-      });
+  LinearDatePicker({
+    this.startDate = "",
+    this.endDate = "",
+    this.initialDate = "",
+    required this.dateChangeListener,
+    this.showDay = true,
+    this.fontFamily = "",
+    this.fontSize = 13,
+    this.labelSize = 13,
+    this.textColor,
+    this.selectedColor,
+    this.unselectedColor,
+    this.yearText = "سال",
+    this.monthText = "ماه",
+    this.dayText = "روز",
+    this.showLabels = true,
+    this.columnWidth = 55.0,
+    this.isJalaali = false,
+    this.showMonthName = false,
+  });
 
   @override
-  _LinearDatePickerState createState() => _LinearDatePickerState(
-      startDate, endDate, initialDate, dateChangeListener,
-      showDay: showDay,
-      fontFamily: fontFamily,
-      textColor: textColor,
-      selectedColor: selectedColor,
-      unselectedColor: unselectedColor,
-      yearText: yearText,
-      monthText: monthText,
-      dayText: dayText,
-      showLabels: showLabels,
-      columnWidth: columnWidth,
-      isJalaali: isJalaali,
-      showMonthName: showMonthName,
-  );
+  _LinearDatePickerState createState() => _LinearDatePickerState();
 }
 
 class _LinearDatePickerState extends State<LinearDatePicker> {
@@ -77,67 +67,26 @@ class _LinearDatePickerState extends State<LinearDatePicker> {
   int minDay = 01;
   int maxDay = 31;
 
-  bool showDay;
-
-  final String startDate;
-  final String endDate;
-  final String initialDate;
-
-  Function(String date) onDateSelected;
-
-  String fontFamily;
-
-  Color? textColor;
-  Color? selectedColor;
-  Color? unselectedColor;
-
-  String? yearText;
-  String? monthText;
-  String? dayText;
-
-  bool? showLabels = false;
-
-  double? columnWidth;
-
-  bool? isJalaali;
-
-  bool? showMonthName;
-
-  _LinearDatePickerState(
-      this.startDate, this.endDate, this.initialDate, this.onDateSelected,
-      {this.showDay = true,
-      this.fontFamily = "",
-      this.textColor,
-      this.selectedColor,
-      this.unselectedColor,
-      this.yearText,
-      this.monthText,
-      this.dayText,
-      this.showLabels,
-      this.columnWidth,
-      this.isJalaali,
-      this.showMonthName});
-
   @override
   initState() {
     super.initState();
-    if (isJalaali!) {
+    if (widget.isJalaali) {
       minYear = Jalali.now().year - 100;
       maxYear = Jalali.now().year;
     } else {
       minYear = Gregorian.now().year - 100;
       maxYear = Gregorian.now().year;
     }
-    if (initialDate.isNotEmpty) {
-      List<String> initList = initialDate.split("/");
+    if (widget.initialDate.isNotEmpty) {
+      List<String> initList = widget.initialDate.split("/");
       _selectedYear = int.parse(initList[0]);
       _selectedMonth = int.parse(initList[1]);
-      if (showDay)
+      if (widget.showDay)
         _selectedDay = int.parse(initList[2]);
       else
-        _selectedDay = isJalaali! ? Jalali.now().day : Jalali.now().day;
+        _selectedDay = widget.isJalaali ? Jalali.now().day : Jalali.now().day;
     } else {
-      if (isJalaali!) {
+      if (widget.isJalaali) {
         _selectedYear = Jalali.now().year;
         _selectedMonth = Jalali.now().month;
         _selectedDay = Jalali.now().day;
@@ -158,33 +107,33 @@ class _LinearDatePickerState extends State<LinearDatePicker> {
       mainAxisSize: MainAxisSize.min,
       children: [
         Visibility(
-          visible: showLabels!,
+          visible: widget.showLabels,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               SizedBox(
-                  width: columnWidth,
+                  width: widget.columnWidth,
                   child: Text(
-                    yearText!,
-                    style: TextStyle(fontFamily: fontFamily, color: textColor),
+                    widget.yearText,
+                    style: TextStyle(fontFamily: widget.fontFamily, fontSize: widget.labelSize, color: widget.textColor),
                     textAlign: TextAlign.center,
                   )),
               SizedBox(
-                  width: columnWidth,
+                  width: widget.columnWidth,
                   child: Text(
-                    monthText!,
-                    style: TextStyle(fontFamily: fontFamily, color: textColor),
+                    widget.monthText,
+                    style: TextStyle(fontFamily: widget.fontFamily, fontSize: widget.labelSize, color: widget.textColor),
                     textAlign: TextAlign.center,
                   )),
               Visibility(
-                visible: showDay,
+                visible: widget.showDay,
                 child: SizedBox(
-                    width: columnWidth,
+                    width: widget.columnWidth,
                     child: Text(
-                      dayText!,
+                      widget.dayText,
                       style:
-                          TextStyle(fontFamily: fontFamily, color: textColor),
+                          TextStyle(fontFamily: widget.fontFamily, fontSize: widget.labelSize, color: widget.textColor),
                       textAlign: TextAlign.center,
                     )),
               ),
@@ -195,61 +144,61 @@ class _LinearDatePickerState extends State<LinearDatePicker> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             NumberPicker.integer(
-                listViewWidth: columnWidth,
+                listViewWidth: widget.columnWidth,
                 initialValue: _selectedYear!,
                 minValue: _getMinimumYear()!,
                 maxValue: _getMaximumYear(),
-                fontFamily: fontFamily,
-                selectedColor: selectedColor,
-                unselectedColor: unselectedColor,
+                fontFamily: widget.fontFamily,
+                fontSize: widget.fontSize,
+                selectedColor: widget.selectedColor,
+                unselectedColor: widget.unselectedColor,
                 onChanged: (value) {
                   setState(() {
                     _selectedYear = value as int?;
-                    if (showDay)
-                      onDateSelected(
-                          "$_selectedYear/$_selectedMonth/$_selectedDay");
+                    if (widget.showDay)
+                      widget.dateChangeListener("$_selectedYear/$_selectedMonth/$_selectedDay");
                     else
-                      onDateSelected("$_selectedYear/$_selectedMonth");
+                      widget.dateChangeListener("$_selectedYear/$_selectedMonth");
                   });
                 }),
             NumberPicker.integer(
-                listViewWidth: columnWidth,
+                listViewWidth: widget.columnWidth,
                 initialValue: _selectedMonth!,
                 minValue: _getMinimumMonth(),
                 maxValue: _getMaximumMonth(),
-                fontFamily: fontFamily,
-                selectedColor: selectedColor,
-                unselectedColor: unselectedColor,
-                isShowMonthName: showMonthName,
-                isJalali: isJalaali,
+                fontFamily: widget.fontFamily,
+                fontSize: widget.fontSize,
+                selectedColor: widget.selectedColor,
+                unselectedColor: widget.unselectedColor,
+                isShowMonthName: widget.showMonthName,
+                isJalali: widget.isJalaali,
                 onChanged: (value) {
                   setState(() {
                     _selectedMonth = value as int?;
-                    if (showDay)
-                      onDateSelected(
-                          "$_selectedYear/$_selectedMonth/$_selectedDay");
+                    if (widget.showDay)
+                      widget.dateChangeListener("$_selectedYear/$_selectedMonth/$_selectedDay");
                     else
-                      onDateSelected("$_selectedYear/$_selectedMonth");
+                      widget.dateChangeListener("$_selectedYear/$_selectedMonth");
                   });
                 }),
             Visibility(
-              visible: showDay,
+              visible: widget.showDay,
               child: NumberPicker.integer(
-                  listViewWidth: columnWidth,
+                  listViewWidth: widget.columnWidth,
                   initialValue: _selectedDay,
                   minValue: _getMinimumDay(),
                   maxValue: _getMaximumDay(),
-                  fontFamily: fontFamily,
-                  selectedColor: selectedColor,
-                  unselectedColor: unselectedColor,
+                  fontFamily: widget.fontFamily,
+                  fontSize: widget.fontSize,
+                  selectedColor: widget.selectedColor,
+                  unselectedColor: widget.unselectedColor,
                   onChanged: (value) {
                     setState(() {
                       _selectedDay = value as int;
-                      if (showDay)
-                        onDateSelected(
-                            "$_selectedYear/$_selectedMonth/$_selectedDay");
+                      if (widget.showDay)
+                        widget.dateChangeListener("$_selectedYear/$_selectedMonth/$_selectedDay");
                       else
-                        onDateSelected("$_selectedYear/$_selectedMonth");
+                        widget.dateChangeListener("$_selectedYear/$_selectedMonth");
                     });
                   }),
             )
@@ -260,7 +209,7 @@ class _LinearDatePickerState extends State<LinearDatePicker> {
   }
 
   _getMonthLength(int? selectedYear, int? selectedMonth) {
-    if (isJalaali!) {
+    if (widget.isJalaali) {
       if (selectedMonth! <= 6) {
         return 31;
       }
@@ -275,21 +224,19 @@ class _LinearDatePickerState extends State<LinearDatePicker> {
     } else {
       DateTime firstOfNextMonth;
       if (selectedMonth == 12) {
-        firstOfNextMonth = DateTime(
-            selectedYear! + 1, 1, 1, 12); //year, selectedMonth, day, hour
+        firstOfNextMonth = DateTime(selectedYear! + 1, 1, 1, 12); //year, selectedMonth, day, hour
       } else {
         firstOfNextMonth = DateTime(selectedYear!, selectedMonth! + 1, 1, 12);
       }
-      int numberOfDaysInMonth =
-          firstOfNextMonth.subtract(Duration(days: 1)).day;
+      int numberOfDaysInMonth = firstOfNextMonth.subtract(Duration(days: 1)).day;
       //.subtract(Duration) returns a DateTime, .day gets the integer for the day of that DateTime
       return numberOfDaysInMonth;
     }
   }
 
   int _getMinimumMonth() {
-    if (startDate.isNotEmpty) {
-      var startList = startDate.split("/");
+    if (widget.startDate.isNotEmpty) {
+      var startList = widget.startDate.split("/");
       int startMonth = int.parse(startList[1]);
 
       if (_selectedYear == _getMinimumYear()) {
@@ -301,8 +248,8 @@ class _LinearDatePickerState extends State<LinearDatePicker> {
   }
 
   int _getMaximumMonth() {
-    if (endDate.isNotEmpty) {
-      var endList = endDate.split("/");
+    if (widget.endDate.isNotEmpty) {
+      var endList = widget.endDate.split("/");
       int endMonth = int.parse(endList[1]);
       if (_selectedYear == _getMaximumYear()) {
         return endMonth;
@@ -312,28 +259,27 @@ class _LinearDatePickerState extends State<LinearDatePicker> {
   }
 
   int? _getMinimumYear() {
-    if (startDate.isNotEmpty) {
-      var startList = startDate.split("/");
+    if (widget.startDate.isNotEmpty) {
+      var startList = widget.startDate.split("/");
       return int.parse(startList[0]);
     }
     return minYear;
   }
 
   _getMaximumYear() {
-    if (endDate.isNotEmpty) {
-      var endList = endDate.split("/");
+    if (widget.endDate.isNotEmpty) {
+      var endList = widget.endDate.split("/");
       return int.parse(endList[0]);
     }
     return maxYear;
   }
 
   int _getMinimumDay() {
-    if (startDate.isNotEmpty && showDay) {
-      var startList = startDate.split("/");
+    if (widget.startDate.isNotEmpty && widget.showDay) {
+      var startList = widget.startDate.split("/");
       int startDay = int.parse(startList[2]);
 
-      if (_selectedYear == _getMinimumYear() &&
-          _selectedMonth == _getMinimumMonth()) {
+      if (_selectedYear == _getMinimumYear() && _selectedMonth == _getMinimumMonth()) {
         return startDay;
       }
     }
@@ -342,11 +288,10 @@ class _LinearDatePickerState extends State<LinearDatePicker> {
   }
 
   int _getMaximumDay() {
-    if (endDate.isNotEmpty && showDay) {
-      var endList = endDate.split("/");
+    if (widget.endDate.isNotEmpty && widget.showDay) {
+      var endList = widget.endDate.split("/");
       int endDay = int.parse(endList[2]);
-      if (_selectedYear == _getMaximumYear() &&
-          _selectedMonth == _getMinimumMonth()) {
+      if (_selectedYear == _getMaximumYear() && _selectedMonth == _getMinimumMonth()) {
         return endDay;
       }
     }

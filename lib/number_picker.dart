@@ -39,17 +39,14 @@ class NumberPicker extends StatelessWidget {
     this.decoration,
     this.haptics = false,
     this.fontFamily = "",
+    this.fontSize = 13,
     this.selectedColor,
     this.unselectedColor,
     this.isShowMonthName = false,
     this.isJalali = false,
-  })  : assert(initialValue != null),
-        assert(minValue != null),
-        assert(maxValue != null),
-        assert(maxValue >= minValue),
+  })  : assert(maxValue >= minValue),
         // assert(initialValue >= minValue && initialValue <= maxValue),
         assert(step > 0),
-        assert(scrollDirection != null),
         selectedIntValue = (initialValue < minValue)
             ? minValue
             : ((initialValue > maxValue) ? maxValue : initialValue),
@@ -132,6 +129,9 @@ class NumberPicker extends StatelessWidget {
 
   ///Set font family
   final String fontFamily;
+
+  ///Set font size
+  final double fontSize;
 
   ///Set selected numbers font color
   final Color? selectedColor;
@@ -235,7 +235,7 @@ class NumberPicker extends StatelessWidget {
                       : Center(
                           child: Text(
                             getDisplayedValue(value),
-                            style: isShowMonthName!?itemStyle.copyWith(fontSize: 13):itemStyle,
+                            style: itemStyle.copyWith(fontSize: fontSize),
                           ),
                         );
                 },

@@ -12,7 +12,7 @@ This package provides a Persian or Gregorian linear DatePicker for flutter.
 Add this to your package's pubspec.yaml file:
 ```
 dependencies:
- flutter_linear_datepicker: ^2.0.0
+ flutter_linear_datepicker: ^2.0.1
  ```
 #### 2. Install it
 You can install packages from the command line:
@@ -61,6 +61,8 @@ LinearDatePicker(
   },
   showDay: true,  //false -> only select year & month
   fontFamily: 'sans',
+  fontSize: 18.0,
+  labelSize: 14.0,
   showLabels: true, // to show column captions, eg. year, month, etc.
   textColor: Colors.black,
   selectedColor: Colors.deepOrange,
