@@ -17,3 +17,6 @@
 ## [2.0.1] - 06/09/2021
 * Add font size
 
+## [2.0.2] - 06/14/2021
+* Add text style support
+

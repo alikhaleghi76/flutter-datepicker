@@ -11,13 +11,9 @@ class LinearDatePicker extends StatefulWidget {
   final String endDate;
   final String initialDate;
 
-  final String fontFamily;
-  final double fontSize;
-  final double labelSize;
-
-  final Color? textColor;
-  final Color? selectedColor;
-  final Color? unselectedColor;
+  final TextStyle? labelStyle;
+  final TextStyle? selectedRowStyle;
+  final TextStyle? unselectedRowStyle;
 
   final String yearText;
   final String monthText;
@@ -34,12 +30,9 @@ class LinearDatePicker extends StatefulWidget {
     this.initialDate = "",
     required this.dateChangeListener,
     this.showDay = true,
-    this.fontFamily = "",
-    this.fontSize = 13,
-    this.labelSize = 13,
-    this.textColor,
-    this.selectedColor,
-    this.unselectedColor,
+    this.labelStyle,
+    this.selectedRowStyle,
+    this.unselectedRowStyle,
     this.yearText = "سال",
     this.monthText = "ماه",
     this.dayText = "روز",
@@ -116,14 +109,14 @@ class _LinearDatePickerState extends State<LinearDatePicker> {
                   width: widget.columnWidth,
                   child: Text(
                     widget.yearText,
-                    style: TextStyle(fontFamily: widget.fontFamily, fontSize: widget.labelSize, color: widget.textColor),
+                    style: widget.labelStyle,
                     textAlign: TextAlign.center,
                   )),
               SizedBox(
                   width: widget.columnWidth,
                   child: Text(
                     widget.monthText,
-                    style: TextStyle(fontFamily: widget.fontFamily, fontSize: widget.labelSize, color: widget.textColor),
+                    style: widget.labelStyle,
                     textAlign: TextAlign.center,
                   )),
               Visibility(
@@ -132,8 +125,7 @@ class _LinearDatePickerState extends State<LinearDatePicker> {
                     width: widget.columnWidth,
                     child: Text(
                       widget.dayText,
-                      style:
-                          TextStyle(fontFamily: widget.fontFamily, fontSize: widget.labelSize, color: widget.textColor),
+                      style: widget.labelStyle,
                       textAlign: TextAlign.center,
                     )),
               ),
@@ -148,10 +140,8 @@ class _LinearDatePickerState extends State<LinearDatePicker> {
                 initialValue: _selectedYear!,
                 minValue: _getMinimumYear()!,
                 maxValue: _getMaximumYear(),
-                fontFamily: widget.fontFamily,
-                fontSize: widget.fontSize,
-                selectedColor: widget.selectedColor,
-                unselectedColor: widget.unselectedColor,
+                selectedRowStyle: widget.selectedRowStyle,
+                unselectedRowStyle: widget.unselectedRowStyle,
                 onChanged: (value) {
                   setState(() {
                     _selectedYear = value as int?;
@@ -166,10 +156,8 @@ class _LinearDatePickerState extends State<LinearDatePicker> {
                 initialValue: _selectedMonth!,
                 minValue: _getMinimumMonth(),
                 maxValue: _getMaximumMonth(),
-                fontFamily: widget.fontFamily,
-                fontSize: widget.fontSize,
-                selectedColor: widget.selectedColor,
-                unselectedColor: widget.unselectedColor,
+                selectedRowStyle: widget.selectedRowStyle,
+                unselectedRowStyle: widget.unselectedRowStyle,
                 isShowMonthName: widget.showMonthName,
                 isJalali: widget.isJalaali,
                 onChanged: (value) {
@@ -188,10 +176,8 @@ class _LinearDatePickerState extends State<LinearDatePicker> {
                   initialValue: _selectedDay,
                   minValue: _getMinimumDay(),
                   maxValue: _getMaximumDay(),
-                  fontFamily: widget.fontFamily,
-                  fontSize: widget.fontSize,
-                  selectedColor: widget.selectedColor,
-                  unselectedColor: widget.unselectedColor,
+                  selectedRowStyle: widget.selectedRowStyle,
+                  unselectedRowStyle: widget.unselectedRowStyle,
                   onChanged: (value) {
                     setState(() {
                       _selectedDay = value as int;
