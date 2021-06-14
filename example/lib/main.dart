@@ -38,12 +38,21 @@ class MyHomePage extends StatelessWidget {
                   print(selectedDate);
                 },
                 showDay: true,
-                fontFamily: 'iran',
-                fontSize: 18.0,
-                labelSize: 14.0,
-                textColor: Colors.black,
-                selectedColor: Colors.deepOrange,
-                unselectedColor: Colors.blueGrey,
+                labelStyle: TextStyle(
+                  fontFamily: 'iran',
+                  fontSize: 14.0,
+                  color: Colors.black,
+                ),
+                selectedRowStyle: TextStyle(
+                  fontFamily: 'iran',
+                  fontSize: 18.0,
+                  color: Colors.deepOrange,
+                ),
+                unselectedRowStyle: TextStyle(
+                  fontFamily: 'iran',
+                  fontSize: 16.0,
+                  color: Colors.blueGrey,
+                ),
                 yearText: "سال | year",
                 monthText: "ماه | month",
                 dayText: "روز | day",
@@ -77,7 +86,7 @@ class MyHomePage extends StatelessWidget {
                   print(selectedDate);
                 },
                 showMonthName: true,
-                isJalaali: true,
+                isJalaali: false,
               ),
             ));
   }
