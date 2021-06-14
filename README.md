@@ -45,7 +45,7 @@ LinearDatePicker(
   dateChangeListener: (String selectedDate) {
     print(selectedDate);
   },
-); 
+);
 ```
 <br>
 
@@ -60,17 +60,27 @@ LinearDatePicker(
     print(selectedDate);
   },
   showDay: true,  //false -> only select year & month
-  fontFamily: 'sans',
-  fontSize: 18.0,
-  labelSize: 14.0,
-  showLabels: true, // to show column captions, eg. year, month, etc.
-  textColor: Colors.black,
-  selectedColor: Colors.deepOrange,
-  unselectedColor: Colors.blueGrey,
+  labelStyle: TextStyle(
+    fontFamily: 'sans',
+    fontSize: 14.0,
+    color: Colors.black,
+  ),
+  selectedRowStyle: TextStyle(
+    fontFamily: 'sans',
+    fontSize: 18.0,
+    color: Colors.deepOrange,
+  ),
+  unselectedRowStyle: TextStyle(
+    fontFamily: 'sans',
+    fontSize: 16.0,
+    color: Colors.blueGrey,
+  ),
   yearText: "سال | year",
   monthText: "ماه | month",
   dayText: "روز | day",
+  showLabels: true, // to show column captions, eg. year, month, etc.
   columnWidth: 100,
+  showMonthName: true,
   isJalaali: false  // false -> Gregorian
 ),
 ```
