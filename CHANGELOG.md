@@ -20,3 +20,6 @@
 ## [2.0.2] - 06/14/2021
 * Add text style support
 
+## [2.0.3] - 09/15/2021
+* Update shamsi_date library to last version
+
