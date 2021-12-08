@@ -277,7 +277,7 @@ class _LinearDatePickerState extends State<LinearDatePicker> {
     if (widget.endDate.isNotEmpty && widget.showDay) {
       var endList = widget.endDate.split("/");
       int endDay = int.parse(endList[2]);
-      if (_selectedYear == _getMaximumYear() && _selectedMonth == _getMinimumMonth()) {
+      if (_selectedYear == _getMaximumYear() && _selectedMonth == _getMaximumMonth()) {
         return endDay;
       }
     }
