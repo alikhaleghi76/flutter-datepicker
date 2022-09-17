@@ -61,7 +61,7 @@ class MyHomePage extends StatelessWidget {
                 showMonthName: true,
                 isJalaali: true,
               ),
-              RaisedButton(
+              ElevatedButton(
                 child: Text(
                   "Pick Date | انتخاب تاریخ",
                 ),
@@ -78,16 +78,17 @@ class MyHomePage extends StatelessWidget {
 
   void showDateDialog(BuildContext context) {
     showDialog(
-        context: context,
-        builder: (_) => AlertDialog(
-              title: Text('Choose Date'),
-              content: LinearDatePicker(
-                dateChangeListener: (String selectedDate) {
-                  print(selectedDate);
-                },
-                showMonthName: true,
-                isJalaali: false,
-              ),
-            ));
+      context: context,
+      builder: (_) => AlertDialog(
+        title: Text('Choose Date'),
+        content: LinearDatePicker(
+          dateChangeListener: (String selectedDate) {
+            print(selectedDate);
+          },
+          showMonthName: true,
+          isJalaali: false,
+        ),
+      ),
+    );
   }
 }
