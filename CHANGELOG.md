@@ -23,9 +23,11 @@
 ## [2.0.3] - 09/15/2021
 * Update shamsi_date library to last version
 
-
-
 ## [2.0.4] - 12/08/2021
 * Update shamsi_date library to last version
 * Bug Fix
+
+## [2.0.5] - 16/06/2023
+* Support for leading zeros
+* Bug Fixes and minor changes
 
