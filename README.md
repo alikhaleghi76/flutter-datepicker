@@ -56,6 +56,7 @@ LinearDatePicker(
   startDate: "2004/10/17", //yyyy/mm/dd
   endDate: "2020/02/20",
   initialDate: "2010/11/15",
+  addLeadingZero: true,
   dateChangeListener: (String selectedDate) {
     print(selectedDate);
   },

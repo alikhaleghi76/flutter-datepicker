@@ -24,6 +24,8 @@ class LinearDatePicker extends StatefulWidget {
   final bool isJalaali;
   final bool showMonthName;
 
+  final bool addLeadingZero;
+
   LinearDatePicker({
     this.startDate = "",
     this.endDate = "",
@@ -40,6 +42,7 @@ class LinearDatePicker extends StatefulWidget {
     this.columnWidth = 55.0,
     this.isJalaali = false,
     this.showMonthName = false,
+    this.addLeadingZero = false,
   });
 
   @override
@@ -146,9 +149,11 @@ class _LinearDatePickerState extends State<LinearDatePicker> {
                   setState(() {
                     _selectedYear = value as int?;
                     if (widget.showDay)
-                      widget.dateChangeListener("$_selectedYear/$_selectedMonth/$_selectedDay");
+                      widget.dateChangeListener(
+                          "${_selectedYear.toString().padLeft(widget.addLeadingZero ? 4 : 1, "0")}/${_selectedMonth.toString().padLeft(widget.addLeadingZero ? 2 : 1, "0")}/${_selectedDay.toString().padLeft(widget.addLeadingZero ? 2 : 1, "0")}");
                     else
-                      widget.dateChangeListener("$_selectedYear/$_selectedMonth");
+                      widget.dateChangeListener(
+                          "${_selectedYear.toString().padLeft(widget.addLeadingZero ? 4 : 1, "0")}/${_selectedMonth.toString().padLeft(widget.addLeadingZero ? 2 : 1, "0")}");
                   });
                 }),
             NumberPicker.integer(
@@ -164,9 +169,11 @@ class _LinearDatePickerState extends State<LinearDatePicker> {
                   setState(() {
                     _selectedMonth = value as int?;
                     if (widget.showDay)
-                      widget.dateChangeListener("$_selectedYear/$_selectedMonth/$_selectedDay");
+                      widget.dateChangeListener(
+                          "${_selectedYear.toString().padLeft(widget.addLeadingZero ? 4 : 1, "0")}/${_selectedMonth.toString().padLeft(widget.addLeadingZero ? 2 : 1, "0")}/${_selectedDay.toString().padLeft(widget.addLeadingZero ? 2 : 1, "0")}");
                     else
-                      widget.dateChangeListener("$_selectedYear/$_selectedMonth");
+                      widget.dateChangeListener(
+                          "${_selectedYear.toString().padLeft(widget.addLeadingZero ? 4 : 1, "0")}/${_selectedMonth.toString().padLeft(widget.addLeadingZero ? 2 : 1, "0")}");
                   });
                 }),
             Visibility(
@@ -182,9 +189,11 @@ class _LinearDatePickerState extends State<LinearDatePicker> {
                     setState(() {
                       _selectedDay = value as int;
                       if (widget.showDay)
-                        widget.dateChangeListener("$_selectedYear/$_selectedMonth/$_selectedDay");
+                        widget.dateChangeListener(
+                            "${_selectedYear.toString().padLeft(widget.addLeadingZero ? 4 : 1, "0")}/${_selectedMonth.toString().padLeft(widget.addLeadingZero ? 2 : 1, "0")}/${_selectedDay.toString().padLeft(widget.addLeadingZero ? 2 : 1, "0")}");
                       else
-                        widget.dateChangeListener("$_selectedYear/$_selectedMonth");
+                        widget.dateChangeListener(
+                            "${_selectedYear.toString().padLeft(widget.addLeadingZero ? 4 : 1, "0")}/${_selectedMonth.toString().padLeft(widget.addLeadingZero ? 2 : 1, "0")}");
                     });
                   }),
             )

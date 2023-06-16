@@ -34,6 +34,7 @@ class MyHomePage extends StatelessWidget {
                 startDate: "1396/12/12",
                 endDate: "1398/01/14",
                 initialDate: "1397/05/05",
+                addLeadingZero: true,
                 dateChangeListener: (String selectedDate) {
                   print(selectedDate);
                 },
