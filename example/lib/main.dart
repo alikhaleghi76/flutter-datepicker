@@ -31,6 +31,7 @@ class MyHomePage extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             children: [
               LinearDatePicker(
+                viewPortCount: 5,
                 startDate: "1396/12/12",
                 endDate: "1398/01/14",
                 initialDate: "1397/05/05",

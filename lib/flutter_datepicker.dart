@@ -25,10 +25,11 @@ class LinearDatePicker extends StatefulWidget {
   final bool showMonthName;
 
   final bool addLeadingZero;
-
+  final int viewPortCount;
   LinearDatePicker({
     this.startDate = "",
     this.endDate = "",
+    this.viewPortCount = 3,
     this.initialDate = "",
     required this.dateChangeListener,
     this.showDay = true,
@@ -139,6 +140,7 @@ class _LinearDatePickerState extends State<LinearDatePicker> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             NumberPicker.integer(
+                viewPortCount: widget.viewPortCount,
                 listViewWidth: widget.columnWidth,
                 initialValue: _selectedYear!,
                 minValue: _getMinimumYear()!,
@@ -158,6 +160,7 @@ class _LinearDatePickerState extends State<LinearDatePicker> {
                     });
                 }),
             NumberPicker.integer(
+                viewPortCount: widget.viewPortCount,
                 listViewWidth: widget.columnWidth,
                 initialValue: _selectedMonth!,
                 minValue: _getMinimumMonth(),
@@ -181,6 +184,7 @@ class _LinearDatePickerState extends State<LinearDatePicker> {
             Visibility(
               visible: widget.showDay,
               child: NumberPicker.integer(
+                  viewPortCount: widget.viewPortCount,
                   listViewWidth: widget.columnWidth,
                   initialValue: _selectedDay,
                   minValue: _getMinimumDay(),
@@ -222,11 +226,13 @@ class _LinearDatePickerState extends State<LinearDatePicker> {
     } else {
       DateTime firstOfNextMonth;
       if (selectedMonth == 12) {
-        firstOfNextMonth = DateTime(selectedYear! + 1, 1, 1, 12); //year, selectedMonth, day, hour
+        firstOfNextMonth = DateTime(
+            selectedYear! + 1, 1, 1, 12); //year, selectedMonth, day, hour
       } else {
         firstOfNextMonth = DateTime(selectedYear!, selectedMonth! + 1, 1, 12);
       }
-      int numberOfDaysInMonth = firstOfNextMonth.subtract(Duration(days: 1)).day;
+      int numberOfDaysInMonth =
+          firstOfNextMonth.subtract(Duration(days: 1)).day;
       //.subtract(Duration) returns a DateTime, .day gets the integer for the day of that DateTime
       return numberOfDaysInMonth;
     }
@@ -277,7 +283,8 @@ class _LinearDatePickerState extends State<LinearDatePicker> {
       var startList = widget.startDate.split("/");
       int startDay = int.parse(startList[2]);
 
-      if (_selectedYear == _getMinimumYear() && _selectedMonth == _getMinimumMonth()) {
+      if (_selectedYear == _getMinimumYear() &&
+          _selectedMonth == _getMinimumMonth()) {
         return startDay;
       }
     }
@@ -289,7 +296,8 @@ class _LinearDatePickerState extends State<LinearDatePicker> {
     if (widget.endDate.isNotEmpty && widget.showDay) {
       var endList = widget.endDate.split("/");
       int endDay = int.parse(endList[2]);
-      if (_selectedYear == _getMaximumYear() && _selectedMonth == _getMaximumMonth()) {
+      if (_selectedYear == _getMaximumYear() &&
+          _selectedMonth == _getMaximumMonth()) {
         return endDay;
       }
     }
