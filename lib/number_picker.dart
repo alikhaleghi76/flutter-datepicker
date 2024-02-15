@@ -30,6 +30,7 @@ class NumberPicker extends StatelessWidget {
     required this.onChanged,
     this.enabled = true,
     this.textMapper,
+    this.viewPortCount = 3,
     this.itemExtent = kDefaultItemExtent,
     this.listViewWidth = kDefaultListViewCrossAxisSize,
     this.step = 1,
@@ -54,7 +55,7 @@ class NumberPicker extends StatelessWidget {
           initialScrollOffset: (initialValue - minValue) ~/ step * itemExtent,
         ),
         decimalScrollController = null,
-        listViewHeight = 3 * itemExtent,
+        listViewHeight = viewPortCount * itemExtent,
         integerItemCount = (maxValue - minValue) ~/ step + 1,
         super(key: key) {
     onChanged(selectedIntValue);
@@ -65,6 +66,7 @@ class NumberPicker extends StatelessWidget {
 
   ///min value user can pick
   final int minValue;
+  final int viewPortCount;
 
   ///max value user can pick
   final int maxValue;
@@ -182,8 +184,8 @@ class NumberPicker extends StatelessWidget {
     TextStyle defaultStyle;
     TextStyle selectedStyle;
 
-    defaultStyle = unselectedRowStyle ?? themeData.textTheme.bodyText2!;
-    selectedStyle = selectedRowStyle ?? themeData.textTheme.subtitle2!;
+    defaultStyle = unselectedRowStyle ?? themeData.textTheme.bodyMedium!;
+    selectedStyle = selectedRowStyle ?? themeData.textTheme.titleSmall!;
 
     var listItemCount = integerItemCount + 2;
 
