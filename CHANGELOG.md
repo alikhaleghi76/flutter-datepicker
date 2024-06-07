@@ -31,3 +31,6 @@
 * Support for leading zeros
 * Bug Fixes and minor changes
 
+## [2.0.6] - 07/06/2024
+* Support flutter 3.22 styles
+
