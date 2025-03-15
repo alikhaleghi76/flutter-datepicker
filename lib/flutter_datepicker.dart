@@ -27,6 +27,8 @@ class LinearDatePicker extends StatefulWidget {
 
   final Duration? debounceDuration;
 
+  final List<String>? monthsNames;
+
   LinearDatePicker({
     this.startDate,
     this.endDate,
@@ -44,6 +46,7 @@ class LinearDatePicker extends StatefulWidget {
     this.isJalali = false,
     this.debounceDuration,
     this.showMonthName = false,
+    this.monthsNames,
   });
 
   @override
@@ -161,8 +164,9 @@ class _LinearDatePickerState extends State<LinearDatePicker> {
                 maxValue: _getMaximumMonth(),
                 selectedRowStyle: widget.selectedRowStyle,
                 unselectedRowStyle: widget.unselectedRowStyle,
-                isShowMonthName: widget.showMonthName,
+                showMonthName: widget.showMonthName,
                 isJalali: widget.isJalali,
+                monthsNames: widget.monthsNames,
                 onChanged: (value) {
                   if (value != selectedDateParts.month)
                     setState(() {

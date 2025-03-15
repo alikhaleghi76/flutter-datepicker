@@ -39,3 +39,6 @@
 * Add debouncing option
 * Code refactor and improvements
 
+## [3.0.1] - 03/15/2025
+* Add custom months names feature
+

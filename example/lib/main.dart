@@ -24,7 +24,7 @@ class MyHomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("DatePicker Demo"),
+        title: Text('DatePicker Demo'),
       ),
       body: Center(
         child: Container(
@@ -54,18 +54,19 @@ class MyHomePage extends StatelessWidget {
                   fontSize: 16.0,
                   color: Colors.blueGrey,
                 ),
-                yearLabel: "سال | year",
-                monthLabel: "ماه | month",
-                dayLabel: "روز | day",
+                yearLabel: 'سال | year',
+                monthLabel: 'ماه | month',
+                dayLabel: 'روز | day',
                 showLabels: true,
                 columnWidth: 100,
                 showMonthName: true,
                 isJalali: true,
                 debounceDuration: Duration(milliseconds: 400),
+                monthsNames: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12',],
               ),
               ElevatedButton(
                 child: Text(
-                  "Pick Date | انتخاب تاریخ",
+                  'Pick Date | انتخاب تاریخ',
                 ),
                 onPressed: () {
                   showDateDialog(context);

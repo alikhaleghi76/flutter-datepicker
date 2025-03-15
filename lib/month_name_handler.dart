@@ -1,7 +1,13 @@
 extension StringExt on int {
-  String getMonthName(bool isJalali) => this > 12
-      ? '$this'
-      : (isJalali ? _jalaliMonths : _gregorianMonths)[this - 1];
+  String getMonthName(bool isJalali, {List<String>? monthsNames}) {
+    if (this > 12 || this < 1) return '$this';
+
+    if (monthsNames != null && monthsNames.length == 12) {
+      return monthsNames[this - 1];
+    }
+
+    return this > 12 ? '$this' : (isJalali ? _jalaliMonths : _gregorianMonths)[this - 1];
+  }
 
   static const _jalaliMonths = [
     "فروردین",

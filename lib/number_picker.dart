@@ -39,8 +39,9 @@ class NumberPicker extends StatelessWidget {
     this.haptics = false,
     this.selectedRowStyle,
     this.unselectedRowStyle,
-    this.isShowMonthName = false,
+    this.showMonthName = false,
     this.isJalali = false,
+    this.monthsNames,
   })  : assert(maxValue >= minValue),
         // assert(initialValue >= minValue && initialValue <= maxValue),
         assert(step > 0),
@@ -131,10 +132,13 @@ class NumberPicker extends StatelessWidget {
   final TextStyle? unselectedRowStyle;
 
   //Show month name instead of month int place in the year
-  final bool? isShowMonthName;
+  final bool? showMonthName;
 
   //isJalali for get the month right name
   final bool? isJalali;
+
+  // a list of strings containing title of each month
+  final List<String>? monthsNames;
 
   //
   //----------------------------- PUBLIC ------------------------------
@@ -243,8 +247,8 @@ class NumberPicker extends StatelessWidget {
   }
 
   String getDisplayedValue(int value) {
-    if (isShowMonthName!) {
-      return value.getMonthName(isJalali!);
+    if (showMonthName!) {
+      return value.getMonthName(isJalali!, monthsNames: monthsNames);
     } else {
       final text = zeroPad
           ? value.toString().padLeft(maxValue.toString().length, '0')

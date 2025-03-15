@@ -12,17 +12,11 @@ This package provides a Persian or Gregorian linear DatePicker for flutter.
 Add this to your package's pubspec.yaml file:
 ```
 dependencies:
- flutter_linear_datepicker: ^3.0.0
+ flutter_linear_datepicker: ^3.0.1
  ```
 #### 2. Install it
 You can install packages from the command line:
 
-with pub:
-```
-$ pub get
-```
-
-with Flutter:
 ```
 $ flutter pub get
 ```
@@ -32,7 +26,6 @@ Alternatively, your editor might support pub get or flutter pub get. Check the d
 Now in your Dart code, you can use:
 ```
 import 'package:flutter_linear_datepicker/flutter_datepicker.dart';
-import 'package:flutter_linear_datepicker/number_picker.dart';
 ```
 <br>
 
@@ -75,15 +68,16 @@ LinearDatePicker(
     fontSize: 16.0,
     color: Colors.blueGrey,
   ),
-  yearLabel: "سال | year",
-  monthLabel: "ماه | month",
-  dayLabel: "روز | day",
+  yearLabel: 'سال | year',
+  monthLabel: 'ماه | month',
+  dayLabel: 'روز | day',
   showLabels: true, // to show column captions, eg. year, month, etc.
   columnWidth: 100,
   showMonthName: true,
   isJalali: false,  // false -> Gregorian
   debounceDuration: Duration(milliseconds: 300), // delay duration to emit the selected date
-),
+  monthsNames: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12',] // custom name for each month
+)
 ```
 <br>
 
