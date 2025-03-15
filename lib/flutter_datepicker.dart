@@ -1,48 +1,49 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_linear_datepicker/date_parts.dart';
 import 'package:shamsi_date/shamsi_date.dart';
-
+import 'dart:async';
 import 'number_picker.dart';
 
 class LinearDatePicker extends StatefulWidget {
   final bool showDay;
-  final Function(String date) dateChangeListener;
+  final Function(DateTime date) dateChangeListener;
 
-  final String startDate;
-  final String endDate;
-  final String initialDate;
+  final DateTime? startDate;
+  final DateTime? endDate;
+  final DateTime? initialDate;
 
   final TextStyle? labelStyle;
   final TextStyle? selectedRowStyle;
   final TextStyle? unselectedRowStyle;
 
-  final String yearText;
-  final String monthText;
-  final String dayText;
+  final String yearLabel;
+  final String monthLabel;
+  final String dayLabel;
 
   final bool showLabels;
   final double columnWidth;
-  final bool isJalaali;
+  final bool isJalali;
   final bool showMonthName;
 
-  final bool addLeadingZero;
+  final Duration? debounceDuration;
 
   LinearDatePicker({
-    this.startDate = "",
-    this.endDate = "",
-    this.initialDate = "",
+    this.startDate,
+    this.endDate,
+    this.initialDate,
     required this.dateChangeListener,
     this.showDay = true,
     this.labelStyle,
     this.selectedRowStyle,
     this.unselectedRowStyle,
-    this.yearText = "سال",
-    this.monthText = "ماه",
-    this.dayText = "روز",
+    this.yearLabel = "سال",
+    this.monthLabel = "ماه",
+    this.dayLabel = "روز",
     this.showLabels = true,
     this.columnWidth = 55.0,
-    this.isJalaali = false,
+    this.isJalali = false,
+    this.debounceDuration,
     this.showMonthName = false,
-    this.addLeadingZero = false,
   });
 
   @override
@@ -50,9 +51,7 @@ class LinearDatePicker extends StatefulWidget {
 }
 
 class _LinearDatePickerState extends State<LinearDatePicker> {
-  int? _selectedYear;
-  int? _selectedMonth;
-  late int _selectedDay;
+  late DateParts selectedDateParts;
 
   int? minYear;
   int? maxYear;
@@ -63,40 +62,43 @@ class _LinearDatePickerState extends State<LinearDatePicker> {
   int minDay = 01;
   int maxDay = 31;
 
+  Timer? _debounce;
+  static const int _debounceDuration = 200;
+
   @override
   initState() {
     super.initState();
-    if (widget.isJalaali) {
+    if (widget.isJalali) {
       minYear = Jalali.now().year - 100;
       maxYear = Jalali.now().year;
     } else {
       minYear = Gregorian.now().year - 100;
       maxYear = Gregorian.now().year;
     }
-    if (widget.initialDate.isNotEmpty) {
-      List<String> initList = widget.initialDate.split("/");
-      _selectedYear = int.parse(initList[0]);
-      _selectedMonth = int.parse(initList[1]);
-      if (widget.showDay)
-        _selectedDay = int.parse(initList[2]);
-      else
-        _selectedDay = widget.isJalaali ? Jalali.now().day : Jalali.now().day;
+
+    selectedDateParts = _calculateSelectedDateParts();
+  }
+
+  DateParts _calculateSelectedDateParts() {
+    late DateParts dateParts;
+    if (widget.initialDate != null) {
+      dateParts = _convertDateToDateParts(dateTime: widget.initialDate!, isJalali: widget.isJalali);
     } else {
-      if (widget.isJalaali) {
-        _selectedYear = Jalali.now().year;
-        _selectedMonth = Jalali.now().month;
-        _selectedDay = Jalali.now().day;
+      if (widget.isJalali) {
+        dateParts = DateParts(day: Jalali.now().day, month: Jalali.now().month, year: Jalali.now().year);
       } else {
-        _selectedYear = Gregorian.now().year;
-        _selectedMonth = Gregorian.now().month;
-        _selectedDay = Gregorian.now().day;
+        dateParts = DateParts(day: Gregorian.now().day, month: Gregorian.now().month, year: Gregorian.now().year);
       }
     }
+    if (!widget.showDay) {
+      dateParts.day = 1;
+    }
+    return dateParts;
   }
 
   @override
   Widget build(BuildContext context) {
-    maxDay = _getMonthLength(_selectedYear, _selectedMonth);
+    maxDay = _getMonthLength(selectedDateParts.year, selectedDateParts.month);
 
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
@@ -111,14 +113,14 @@ class _LinearDatePickerState extends State<LinearDatePicker> {
               SizedBox(
                   width: widget.columnWidth,
                   child: Text(
-                    widget.yearText,
+                    widget.yearLabel,
                     style: widget.labelStyle,
                     textAlign: TextAlign.center,
                   )),
               SizedBox(
                   width: widget.columnWidth,
                   child: Text(
-                    widget.monthText,
+                    widget.monthLabel,
                     style: widget.labelStyle,
                     textAlign: TextAlign.center,
                   )),
@@ -127,7 +129,7 @@ class _LinearDatePickerState extends State<LinearDatePicker> {
                 child: SizedBox(
                     width: widget.columnWidth,
                     child: Text(
-                      widget.dayText,
+                      widget.dayLabel,
                       style: widget.labelStyle,
                       textAlign: TextAlign.center,
                     )),
@@ -140,63 +142,48 @@ class _LinearDatePickerState extends State<LinearDatePicker> {
           children: [
             NumberPicker.integer(
                 listViewWidth: widget.columnWidth,
-                initialValue: _selectedYear!,
+                initialValue: selectedDateParts.year,
                 minValue: _getMinimumYear()!,
                 maxValue: _getMaximumYear(),
                 selectedRowStyle: widget.selectedRowStyle,
                 unselectedRowStyle: widget.unselectedRowStyle,
                 onChanged: (value) {
-                  if (value != _selectedYear)
+                  if (value != selectedDateParts.year)
                     setState(() {
-                      _selectedYear = value as int?;
-                      if (widget.showDay)
-                        widget.dateChangeListener(
-                            "${_selectedYear.toString().padLeft(widget.addLeadingZero ? 4 : 1, "0")}/${_selectedMonth.toString().padLeft(widget.addLeadingZero ? 2 : 1, "0")}/${_selectedDay.toString().padLeft(widget.addLeadingZero ? 2 : 1, "0")}");
-                      else
-                        widget.dateChangeListener(
-                            "${_selectedYear.toString().padLeft(widget.addLeadingZero ? 4 : 1, "0")}/${_selectedMonth.toString().padLeft(widget.addLeadingZero ? 2 : 1, "0")}");
+                      selectedDateParts.year = value as int;
+                      _notifyDateChange();
                     });
                 }),
             NumberPicker.integer(
                 listViewWidth: widget.columnWidth,
-                initialValue: _selectedMonth!,
+                initialValue: selectedDateParts.month,
                 minValue: _getMinimumMonth(),
                 maxValue: _getMaximumMonth(),
                 selectedRowStyle: widget.selectedRowStyle,
                 unselectedRowStyle: widget.unselectedRowStyle,
                 isShowMonthName: widget.showMonthName,
-                isJalali: widget.isJalaali,
+                isJalali: widget.isJalali,
                 onChanged: (value) {
-                  if (value != _selectedMonth)
+                  if (value != selectedDateParts.month)
                     setState(() {
-                      _selectedMonth = value as int?;
-                      if (widget.showDay)
-                        widget.dateChangeListener(
-                            "${_selectedYear.toString().padLeft(widget.addLeadingZero ? 4 : 1, "0")}/${_selectedMonth.toString().padLeft(widget.addLeadingZero ? 2 : 1, "0")}/${_selectedDay.toString().padLeft(widget.addLeadingZero ? 2 : 1, "0")}");
-                      else
-                        widget.dateChangeListener(
-                            "${_selectedYear.toString().padLeft(widget.addLeadingZero ? 4 : 1, "0")}/${_selectedMonth.toString().padLeft(widget.addLeadingZero ? 2 : 1, "0")}");
+                      selectedDateParts.month = value as int;
+                      _notifyDateChange();
                     });
                 }),
             Visibility(
               visible: widget.showDay,
               child: NumberPicker.integer(
                   listViewWidth: widget.columnWidth,
-                  initialValue: _selectedDay,
+                  initialValue: selectedDateParts.day,
                   minValue: _getMinimumDay(),
                   maxValue: _getMaximumDay(),
                   selectedRowStyle: widget.selectedRowStyle,
                   unselectedRowStyle: widget.unselectedRowStyle,
                   onChanged: (value) {
-                    if (value != _selectedDay)
+                    if (value != selectedDateParts.day)
                       setState(() {
-                        _selectedDay = value as int;
-                        if (widget.showDay)
-                          widget.dateChangeListener(
-                              "${_selectedYear.toString().padLeft(widget.addLeadingZero ? 4 : 1, "0")}/${_selectedMonth.toString().padLeft(widget.addLeadingZero ? 2 : 1, "0")}/${_selectedDay.toString().padLeft(widget.addLeadingZero ? 2 : 1, "0")}");
-                        else
-                          widget.dateChangeListener(
-                              "${_selectedYear.toString().padLeft(widget.addLeadingZero ? 4 : 1, "0")}/${_selectedMonth.toString().padLeft(widget.addLeadingZero ? 2 : 1, "0")}");
+                        selectedDateParts.day = value as int;
+                        _notifyDateChange();
                       });
                   }),
             )
@@ -206,8 +193,20 @@ class _LinearDatePickerState extends State<LinearDatePicker> {
     );
   }
 
+  void _notifyDateChange() {
+    if (_debounce?.isActive ?? false) _debounce?.cancel();
+    _debounce = Timer(widget.debounceDuration ?? const Duration(milliseconds: _debounceDuration), () {
+      try {
+        DateTime selectedDate = widget.isJalali
+            ? Jalali(selectedDateParts.year, selectedDateParts.month, selectedDateParts.day).toDateTime()
+            : DateTime(selectedDateParts.year, selectedDateParts.month, selectedDateParts.day);
+        widget.dateChangeListener(selectedDate);
+      } catch (e) {}
+    });
+  }
+
   _getMonthLength(int? selectedYear, int? selectedMonth) {
-    if (widget.isJalaali) {
+    if (widget.isJalali) {
       if (selectedMonth! <= 6) {
         return 31;
       }
@@ -233,11 +232,11 @@ class _LinearDatePickerState extends State<LinearDatePicker> {
   }
 
   int _getMinimumMonth() {
-    if (widget.startDate.isNotEmpty) {
-      var startList = widget.startDate.split("/");
-      int startMonth = int.parse(startList[1]);
+    if (widget.startDate != null) {
+      var startDateParts = _convertDateToDateParts(dateTime: widget.startDate!, isJalali: widget.isJalali);
+      int startMonth = startDateParts.month;
 
-      if (_selectedYear == _getMinimumYear()) {
+      if (selectedDateParts.year == _getMinimumYear()) {
         return startMonth;
       }
     }
@@ -246,10 +245,10 @@ class _LinearDatePickerState extends State<LinearDatePicker> {
   }
 
   int _getMaximumMonth() {
-    if (widget.endDate.isNotEmpty) {
-      var endList = widget.endDate.split("/");
-      int endMonth = int.parse(endList[1]);
-      if (_selectedYear == _getMaximumYear()) {
+    if (widget.endDate != null) {
+      var endDateParts = _convertDateToDateParts(dateTime: widget.endDate!, isJalali: widget.isJalali);
+      int endMonth = endDateParts.month;
+      if (selectedDateParts.year == _getMaximumYear()) {
         return endMonth;
       }
     }
@@ -257,27 +256,27 @@ class _LinearDatePickerState extends State<LinearDatePicker> {
   }
 
   int? _getMinimumYear() {
-    if (widget.startDate.isNotEmpty) {
-      var startList = widget.startDate.split("/");
-      return int.parse(startList[0]);
+    if (widget.startDate != null) {
+      var startDateParts = _convertDateToDateParts(dateTime: widget.startDate!, isJalali: widget.isJalali);
+      return startDateParts.year;
     }
     return minYear;
   }
 
   _getMaximumYear() {
-    if (widget.endDate.isNotEmpty) {
-      var endList = widget.endDate.split("/");
-      return int.parse(endList[0]);
+    if (widget.endDate != null) {
+      var endDateParts = _convertDateToDateParts(dateTime: widget.endDate!, isJalali: widget.isJalali);
+      return endDateParts.year;
     }
     return maxYear;
   }
 
   int _getMinimumDay() {
-    if (widget.startDate.isNotEmpty && widget.showDay) {
-      var startList = widget.startDate.split("/");
-      int startDay = int.parse(startList[2]);
+    if (widget.startDate != null && widget.showDay) {
+      var startDateParts = _convertDateToDateParts(dateTime: widget.startDate!, isJalali: widget.isJalali);
+      int startDay = startDateParts.day;
 
-      if (_selectedYear == _getMinimumYear() && _selectedMonth == _getMinimumMonth()) {
+      if (selectedDateParts.year == _getMinimumYear() && selectedDateParts.month == _getMinimumMonth()) {
         return startDay;
       }
     }
@@ -286,13 +285,27 @@ class _LinearDatePickerState extends State<LinearDatePicker> {
   }
 
   int _getMaximumDay() {
-    if (widget.endDate.isNotEmpty && widget.showDay) {
-      var endList = widget.endDate.split("/");
-      int endDay = int.parse(endList[2]);
-      if (_selectedYear == _getMaximumYear() && _selectedMonth == _getMaximumMonth()) {
+    if (widget.endDate != null && widget.showDay) {
+      var endDateParts = _convertDateToDateParts(dateTime: widget.endDate!, isJalali: widget.isJalali);
+      int endDay = endDateParts.day;
+      if (selectedDateParts.year == _getMaximumYear() && selectedDateParts.month == _getMaximumMonth()) {
         return endDay;
       }
     }
-    return _getMonthLength(_selectedYear, _selectedMonth);
+    return _getMonthLength(selectedDateParts.year, selectedDateParts.month);
+  }
+
+  DateParts _convertDateToDateParts({required DateTime dateTime, required bool isJalali}) {
+    if (isJalali) {
+      var jalali = Jalali.fromDateTime(dateTime);
+      return DateParts(day: jalali.day, month: jalali.month, year: jalali.year);
+    }
+    return DateParts(day: dateTime.day, month: dateTime.month, year: dateTime.year);
+  }
+
+  @override
+  void dispose() {
+    _debounce?.cancel();
+    super.dispose();
   }
 }

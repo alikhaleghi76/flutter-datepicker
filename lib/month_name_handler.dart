@@ -1,7 +1,7 @@
 extension StringExt on int {
-  String getMonthName(bool isJalali) =>
-      (isJalali ? _jalaliMonths : _gregorianMonths).elementAtOrNull(this - 1) ??
-      '$this';
+  String getMonthName(bool isJalali) => this > 12
+      ? '$this'
+      : (isJalali ? _jalaliMonths : _gregorianMonths)[this - 1];
 
   static const _jalaliMonths = [
     "فروردین",

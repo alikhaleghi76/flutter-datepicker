@@ -34,3 +34,8 @@
 ## [2.0.6] - 07/06/2024
 * Support flutter 3.22 styles
 
+## [3.0.0] - 03/15/2025
+* Update API and date formats
+* Add debouncing option
+* Code refactor and improvements
+

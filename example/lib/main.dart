@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_linear_datepicker/flutter_datepicker.dart';
+import 'package:shamsi_date/shamsi_date.dart';
 
 void main() {
   runApp(MyApp());
@@ -31,12 +32,11 @@ class MyHomePage extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             children: [
               LinearDatePicker(
-                startDate: "1396/12/12",
-                endDate: "1398/01/14",
-                initialDate: "1397/05/05",
-                addLeadingZero: true,
-                dateChangeListener: (String selectedDate) {
-                  print(selectedDate);
+                startDate: DateTime(2022),
+                endDate: DateTime.now().add(Duration(days: 365)),
+                initialDate: DateTime.now(),
+                dateChangeListener: (DateTime selectedDate) {
+                  print(Jalali.fromDateTime(selectedDate));
                 },
                 showDay: true,
                 labelStyle: TextStyle(
@@ -54,13 +54,14 @@ class MyHomePage extends StatelessWidget {
                   fontSize: 16.0,
                   color: Colors.blueGrey,
                 ),
-                yearText: "سال | year",
-                monthText: "ماه | month",
-                dayText: "روز | day",
+                yearLabel: "سال | year",
+                monthLabel: "ماه | month",
+                dayLabel: "روز | day",
                 showLabels: true,
                 columnWidth: 100,
                 showMonthName: true,
-                isJalaali: true,
+                isJalali: true,
+                debounceDuration: Duration(milliseconds: 400),
               ),
               ElevatedButton(
                 child: Text(
@@ -83,11 +84,11 @@ class MyHomePage extends StatelessWidget {
       builder: (_) => AlertDialog(
         title: Text('Choose Date'),
         content: LinearDatePicker(
-          dateChangeListener: (String selectedDate) {
+          dateChangeListener: (DateTime selectedDate) {
             print(selectedDate);
           },
           showMonthName: true,
-          isJalaali: false,
+          isJalali: false,
         ),
       ),
     );

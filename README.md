@@ -1,5 +1,5 @@
 
-# Flutter Persian (Jalaali) and Gregorian Linear Date Picker
+# Flutter Persian (Jalali) and Gregorian Linear Date Picker
 [![Pub](https://img.shields.io/pub/v/flutter_linear_datepicker?color=blue)](https://pub.dev/packages/flutter_linear_datepicker)
 
 This package provides a Persian or Gregorian linear DatePicker for flutter. 
@@ -12,7 +12,7 @@ This package provides a Persian or Gregorian linear DatePicker for flutter.
 Add this to your package's pubspec.yaml file:
 ```
 dependencies:
- flutter_linear_datepicker: ^2.0.6
+ flutter_linear_datepicker: ^3.0.0
  ```
 #### 2. Install it
 You can install packages from the command line:
@@ -38,11 +38,11 @@ import 'package:flutter_linear_datepicker/number_picker.dart';
 
 ## How to use?
 #### Simple usage
-just simply infalate following snippet in your flutter code:
+just simply put following widget in your flutter code:
 
 ```
 LinearDatePicker(
-  dateChangeListener: (String selectedDate) {
+  dateChangeListener: (DateTime selectedDate) {
     print(selectedDate);
   },
 );
@@ -53,11 +53,10 @@ LinearDatePicker(
 You can customize widget using below parameters:
 ```
 LinearDatePicker(
-  startDate: "2004/10/17", //yyyy/mm/dd
-  endDate: "2020/02/20",
-  initialDate: "2010/11/15",
-  addLeadingZero: true,
-  dateChangeListener: (String selectedDate) {
+  startDate: DateTime(2022),
+  endDate: DateTime.now().add(Duration(days: 365)),
+  initialDate: DateTime.now(),
+  dateChangeListener: (DateTime selectedDate) {
     print(selectedDate);
   },
   showDay: true,  //false -> only select year & month
@@ -76,13 +75,14 @@ LinearDatePicker(
     fontSize: 16.0,
     color: Colors.blueGrey,
   ),
-  yearText: "سال | year",
-  monthText: "ماه | month",
-  dayText: "روز | day",
+  yearLabel: "سال | year",
+  monthLabel: "ماه | month",
+  dayLabel: "روز | day",
   showLabels: true, // to show column captions, eg. year, month, etc.
   columnWidth: 100,
   showMonthName: true,
-  isJalaali: false  // false -> Gregorian
+  isJalali: false,  // false -> Gregorian
+  debounceDuration: Duration(milliseconds: 300), // delay duration to emit the selected date
 ),
 ```
 <br>
